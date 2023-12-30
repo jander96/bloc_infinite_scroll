@@ -1,7 +1,7 @@
 
 import 'package:dio/dio.dart';
-import 'package:flutter_pagination_example/src/common/domain/hero.dart';
 import 'package:injectable/injectable.dart';
+import 'package:network/src/network/domain/hero.dart';
 import 'package:retrofit/http.dart';
 part 'marvel_api_client.g.dart';
 @RestApi(baseUrl: 'https://gateway.marvel.com:443/v1/public/')

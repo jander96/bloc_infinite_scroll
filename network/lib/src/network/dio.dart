@@ -1,18 +1,22 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_pagination_example/src/common/data/network/constants.dart';
-import 'package:flutter_pagination_example/src/common/data/network/marvel_api_client.dart';
-import 'package:flutter_pagination_example/src/common/di/dependency_injection.dart';
 import 'package:injectable/injectable.dart';
 import 'package:crypto/crypto.dart' as crypto;
+import 'package:network/src/network/constants.dart';
+import 'package:network/src/network/di/injection.dart';
+import 'package:network/src/network/disney_api_client.dart';
+import 'package:network/src/network/marvel_api_client.dart';
 
 @module
 abstract class RegisterModule {
   @lazySingleton
-  Dio get dio => Dio()..interceptors.add(MyInterceptor());
+  Dio get dio => Dio();
   @lazySingleton
   MarvelApiClient get restClient => MarvelApiClient(getIt<Dio>());
+
+  @lazySingleton
+  DisneyApiClient get disneyClient => DisneyApiClient(getIt<Dio>());
 }
 class MyInterceptor extends Interceptor {
   @override

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pagination_example/src/common/data/network/network_errors/network_errors.dart';
 import 'package:flutter_pagination_example/src/common/di/dependency_injection.dart';
-import 'package:flutter_pagination_example/src/common/widgets/app_infinit_list_widget.dart';
+import 'package:flutter_pagination_example/src/common/domain/disney_char.dart';
 import 'package:flutter_pagination_example/src/features/heros/presenter/bloc/hero_list_bloc.dart';
 import 'package:flutter_pagination_example/src/features/heros/presenter/bloc/hero_list_event.dart';
-import 'package:flutter_pagination_example/src/features/heros/presenter/bloc/hero_list_view_state.dart';
 import 'package:flutter_pagination_example/src/common/domain/hero.dart'
     as hero_model;
+import 'package:bloc_scroll_paging/bloc_scroll_paging.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class HeroPage extends StatelessWidget {
   const HeroPage({super.key});
@@ -16,40 +17,53 @@ class HeroPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (BuildContext context) =>
-            getIt.get<HeroBloc>()..add(HeroFetched()),
+            getIt.get<HeroBloc>(),
         child: _HeroView());
   }
 }
 
-class _HeroView extends StatelessWidget {
+class _HeroView extends StatefulWidget {
+  @override
+  State<_HeroView> createState() => _HeroViewState();
+}
+
+class _HeroViewState extends State<_HeroView> {
+  @override
+  void initState() {
+    context.read<HeroBloc>().add(HeroFetched());
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final viewState = context.watch<HeroBloc>().state;
     return Center(
-      child: switch (viewState.status) {
-        HeroStatus.initial => const CircularProgressIndicator(),
-        HeroStatus.success => HeroList(heroList: viewState.heros),
-        HeroStatus.failure => ErrorWidget(error: ConnectionError() ?? UnKnow()),
-      },
+      child: viewState.asyncViewState.when(
+          idle: () => const SizedBox() ,
+          loading: () => const CircularProgressIndicator(),
+          success: () => HeroList(disneyList: viewState.paginatedList),
+          error: () => ErrorWidget(error: viewState.asyncError!),
+      )
     );
   }
 }
 
 class HeroList extends StatelessWidget {
-  const HeroList({super.key, required this.heroList});
+  const HeroList({super.key, required this.disneyList});
 
-  final List<hero_model.Hero> heroList;
+  final List<DisneyData> disneyList;
 
   @override
   Widget build(BuildContext context) {
     final viewState = context.watch<HeroBloc>().state;
-    return BlocInfiniteList<hero_model.Hero>(
-        itemList: heroList,
+    return BlocInfiniteList<DisneyData>(
+      initialPage: 2,
+      pagingCompleted: viewState.pagingStatus.isPaginationCompleted,
+        itemList: disneyList,
         loadingBuilder: () => const BottomLoader(),
         triggerEvent: (page) {
-          context.read<HeroBloc>().add(HeroFetched(page: page));
+          context.read<HeroBloc>().add(HeroFetched(page: page, pageSize: 20));
         },
-        child: (hero) => GridItem(hero: hero)
+        child: (hero) => GridItem(disney: hero)
 
             // ListTile(
             //   leading: Image.network(
@@ -63,11 +77,12 @@ class HeroList extends StatelessWidget {
             controller: controller,
             itemBuilder: itemBuilder,
             itemCount: itemCount,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
           );
         },
-        hasReachedMax: viewState.hasReachedMax,
-    bottomBuilder: ()=>Text("El fin "),);
+        hasReachedMax: viewState.pagingStatus.hasReachedMax,
+
+    bottomBuilder: ()=>const Text("El fin "),);
   }
 }
 
@@ -84,7 +99,7 @@ class ErrorWidget extends StatelessWidget {
       BadRequest() => const Text('Error de cliente'),
       Forbidden() => const Text('No disponible'),
       NotFound() => const Text('No se encuentra '),
-      UnKnow() => const Text('Error de conexion'),
+      UnKnow() => const Text('Error de desconocido'),
       LimitExceeded() => const Text('Limite sobrepasado '),
     };
   }
@@ -106,17 +121,16 @@ class BottomLoader extends StatelessWidget {
 }
 
 class GridItem extends StatelessWidget {
-  const GridItem({super.key, required this.hero});
-  final hero_model.Hero hero;
+  const GridItem({super.key, required this.disney});
+  final DisneyData disney;
 
   @override
   Widget build(BuildContext context) {
-    return  Card(
+    return  Card(margin: const EdgeInsets.all(8),
       child: Column(
         children: [
-          Image.network(
-              "${hero.thumbnail!.path}.${hero.thumbnail!.extension}", height: 40, width: 40,),
-          Text(hero.name!)
+          Image(image: CachedNetworkImageProvider("${disney.imageUrl}", maxHeight: 80,scale: 1.5)),
+          Text('${disney.name}')
         ],
       ),
     );
