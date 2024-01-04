@@ -1,14 +1,11 @@
-import 'package:dartz/dartz.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_pagination_example/src/common/data/network/network_errors/network_errors.dart';
-import 'package:flutter_pagination_example/src/common/domain/disney_char.dart';
-import 'package:flutter_pagination_example/src/common/domain/hero.dart';
 import 'package:flutter_pagination_example/src/features/heros/domain/repository/disney_repository.dart';
-import 'package:flutter_pagination_example/src/features/heros/domain/repository/hero_repository.dart';
 import 'package:flutter_pagination_example/src/features/heros/presenter/bloc/hero_list_event.dart';
 import 'package:flutter_pagination_example/src/features/heros/presenter/bloc/hero_list_view_state.dart';
 import 'package:injectable/injectable.dart';
 import 'package:bloc_scroll_paging/bloc_scroll_paging.dart';
+import 'package:network/network.dart';
 
 const throttleDuration = Duration(milliseconds: 100);
 
