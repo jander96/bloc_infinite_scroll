@@ -1,16 +1,21 @@
-# flutter_pagination_example
+# Ejemplo de aplicación Flutter con arquitectura Bloc, DDD , Multimódulos, Programacion funcional, Environments, Inyeccion de dependencias,
+Pagination
 
-A new Flutter project.
+Este es un ejemplo de aplicación Flutter que utiliza la arquitectura Bloc, DDD y multimódulos. La aplicación se divide en 2 módulos.
+No se trata de una app enfocada en UI sino en Arch y principalmente como podemos hacer uso de una libreria personal de paginacion de listados con Bloc
 
-## Getting Started
+## Estructura del proyecto
 
-This project is a starting point for a Flutter application.
+El proyecto se divide en los siguientes módulos:
 
-A few resources to get you started if this is your first Flutter project:
+- `app`: Modulo principal que se encarga de contener las features, Actualmente una sola , encargada de mostrar un listado de personajes de Disney
+- `network`: Este módulo contiene la capa de red. 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Arquitectura
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+La aplicación utiliza la arquitectura Bloc para manejar el flujo de datos. Aprobechando el uso de la programacion funcional y enfoque DDD
+La arquitectura de la aplicación se basa en los principios de Domain Driven Design (DDD). la capa `domain` contiene la lógica de negocio de la aplicación, define las interfaces que deben ser implementadas por la capa `data`.
+
+## Licencia
+
+Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
