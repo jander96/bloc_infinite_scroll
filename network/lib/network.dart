@@ -1,6 +1,7 @@
 library network;
 
 export 'src/network/di/injection.dart';
+export 'src/network/di/injection.module.dart';
 export 'src/network/domain/disney_char.dart';
 export 'src/network/domain/hero.dart';
 export 'src/network/network_errors/network_errors.dart';

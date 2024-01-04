@@ -54,7 +54,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: e97c0dae5020d8e6514348ba0af9f053617ced95
+      resolved-ref: dd2c2857d9e29e487a508e2b682c507a618e8b33
       url: "https://github.com/jander96/bloc_scroll_paging.git"
     source: git
     version: "0.0.3"

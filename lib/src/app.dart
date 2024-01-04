@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pagination_example/src/common/di/dependency_injection.dart';
 import 'package:flutter_pagination_example/src/features/heros/presenter/view/hero_list_page.dart';
-
-void main() {
-  configureDependencies();
-  runApp(const MyApp());
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

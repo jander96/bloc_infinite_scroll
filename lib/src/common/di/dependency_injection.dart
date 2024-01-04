@@ -1,3 +1,4 @@
+
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:network/network.dart';
@@ -8,10 +9,19 @@ final getIt = GetIt.instance;
 @InjectableInit(
   initializerName: 'init', // default
   preferRelativeImports: true, // default
-  asExtension: true, // default
+  asExtension: true,
+  externalPackageModules: [
+    NetworkPackageModule
+  ]// default
 )
-void configureDependencies() {
-  // Dependencias de todos los restantes modulos
-  configureNetworkModuleDependencies(getIt);
-  getIt.init();
+void configureDependencies({required String environment}) {
+  getIt.init(environment: environment );
+}
+
+enum Env{
+  prod('prod'),
+  dev('dev'),
+  test('test');
+  final String name;
+  const Env(this.name);
 }

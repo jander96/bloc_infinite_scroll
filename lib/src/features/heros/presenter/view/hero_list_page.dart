@@ -1,11 +1,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_pagination_example/src/common/di/dependency_injection.dart';
 import 'package:flutter_pagination_example/src/features/heros/presenter/bloc/hero_list_bloc.dart';
 import 'package:flutter_pagination_example/src/features/heros/presenter/bloc/hero_list_event.dart';
-import 'package:network/network.dart';
+// import 'package:network/network.dart';
 import 'package:bloc_scroll_paging/bloc_scroll_paging.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:network/network.dart';
 
 class HeroPage extends StatelessWidget {
   const HeroPage({super.key});
@@ -35,10 +37,12 @@ class _HeroViewState extends State<_HeroView> {
     final viewState = context.watch<HeroBloc>().state;
     return Center(
       child: viewState.asyncValue.when(
-          initial: (initial) => SizedBox(),
+        loading: (_) => const Center(child: CircularProgressIndicator()),
+        initial: (initial) => const SizedBox(),
           data: (data) => HeroList(disneyList: data),
           error: (error, stackTrace) => ErrorWidget(error: error as NetworkError,),
-          loading: (previous) => const Center(child: CircularProgressIndicator()),)
+          )
+
     );
   }
 }
